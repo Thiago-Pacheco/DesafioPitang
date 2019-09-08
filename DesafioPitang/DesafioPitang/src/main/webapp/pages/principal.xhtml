@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Principal</title>
+</h:head>
+
+<h:body>
+
+	<p:growl id="msg" />
+
+	<f:event listener="#{usuarioBean.listar}" type="preRenderView" />
+
+	<h:form id="formlista">
+
+		<p:panel header="Lista de usuarios" id="listapainel">
+
+			<p:dataTable id="tabela" emptyMessage="Nenhum usuario encontrado"
+				paginator="true" value="#{usuarioBean.lista}" var="usuarios">
+
+				<f:facet name="header">
+
+					<p:commandButton value="Cadastrar"
+						oncomplete="PF('dialogousuario').show();"
+						actionListener="#{usuarioBean.novo}" update=":formusuario:painel" />
+
+				</f:facet>
+
+
+				<p:column headerText="Nome">
+
+					<h:outputText value="#{usuarios.nome}" />
+
+				</p:column>
+
+				<p:column headerText="E-mail">
+
+					<h:outputText value="#{usuarios.email}" />
+
+				</p:column>
+
+				<p:column headerText="DDD">
+
+					<h:outputText value="#{usuarios.ddd}" />
+
+				</p:column>
+
+				<p:column headerText="Numero">
+
+					<h:outputText value="#{usuarios.numero}" />
+
+				</p:column>
+
+				<p:column headerText="Tipo">
+
+					<h:outputText value="#{usuarios.tipo}" />
+
+				</p:column>
+
+				<p:column headerText="Opcoes">
+
+					<p:commandButton icon="ui-icon-trash"
+						actionListener="#{usuarioBean.excluir}"
+						update=":msg :formlista:tabela">
+
+						<p:confirm header="Confirme" message="Deseja excluir"
+							icon="ui-icon-alert" />
+
+						<f:attribute name="usuarioSelecionado" value="#{usuarios}" />
+
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{usuarioBean.editar}"
+						update=":formusuario:painel"
+						oncomplete="PF('dialogousuario').show();">
+
+						<f:attribute name="usuarioSelecionado" value="#{usuarios}" />
+
+
+					</p:commandButton>
+
+				</p:column>
+
+			</p:dataTable>
+
+			<p:confirmDialog global="true">
+
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+
+				<p:commandButton value="Nao" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+
+
+			</p:confirmDialog>
+			
+			<p:commandButton value="Sair"
+					actionListener="#{usuarioBean.sair}"
+					update=":msg :formusuario:painel :formlista:listapainel" />
+
+		</p:panel>
+
+	</h:form>
+
+	<p:dialog header="Cadastro Usuario" widgetVar="dialogousuario"
+		draggable="false" resizable="false" modal="true">
+
+		<h:form id="formusuario">
+
+			<h:panelGrid columns="2" id="painel">
+
+				<p:outputLabel value="Nome:" />
+
+				<p:inputText maxlength="30" size="30"
+					value="#{usuarioBean.usuario.nome}">
+
+					<f:validateBean />
+
+				</p:inputText>
+
+				<p:outputLabel value="E-mail" />
+
+				<p:inputText maxlength="30" size="30"
+					value="#{usuarioBean.usuario.email}">
+
+					<f:validateBean />
+
+				</p:inputText>
+
+				<p:outputLabel value="Senha" />
+
+				<p:inputText maxlength="30" size="30"
+					value="#{usuarioBean.usuario.senha}">
+
+					<f:validateBean />
+
+				</p:inputText>
+
+				<p:outputLabel value="DDD" />
+
+				<p:inputText maxlength="2" size="2"
+					value="#{usuarioBean.usuario.ddd}">
+
+					<f:validateBean />
+
+				</p:inputText>
+
+				<p:outputLabel value="Numero" />
+
+				<p:inputText maxlength="9" size="9"
+					value="#{usuarioBean.usuario.numero}">
+
+					<f:validateBean />
+
+				</p:inputText>
+
+				<p:outputLabel value="Tipo" />
+
+				<p:inputText maxlength="10" size="10"
+					value="#{usuarioBean.usuario.tipo}">
+
+					<f:validateBean />
+
+				</p:inputText>
+
+				<p:commandButton value="Salvar"
+					actionListener="#{usuarioBean.salvar}"
+					update=":msg :formusuario:painel :formlista:listapainel" />
+
+				<p:commandButton value="Fechar"
+					oncomplete="PF('dialogousuario').hide();" />
+
+			</h:panelGrid>
+
+		</h:form>
+
+	</p:dialog>
+
+
+</h:body>
+
+</html>
